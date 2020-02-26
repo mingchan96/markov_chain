@@ -85,13 +85,16 @@ string markovIteration(string startWord, unordered_map<string, Word*> wordHash, 
 }
 
 //first argument filename, second number of quotes
+//third argument determines if only non-profanity words allowed
 //int main(int argc, char** argv){
 int main() {
 
-  //int numQuotes = stoi(argv[2]);
   //string filename = argv[1];
-  int numQuotes = 3;
+  //int numQuotes = stoi(argv[2]);
+  //int safeWords = stoi(argv[3])
+
   string filename = "Ron_Burgundy.txt";
+  int numQuotes = 3;
 
   ifstream input_file;
   input_file.open(filename);
@@ -100,6 +103,8 @@ int main() {
     cout << "File could not be opened" << endl;
     return 0;
   }
+
+
 
   vector <string> beginning;
   unordered_map <string, Word*> wordHash;
