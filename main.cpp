@@ -8,6 +8,7 @@
 #include <random>
 #include <time.h>
 #include "word.h"
+#include "filterProfanity.h"
 
 using namespace std;
 
@@ -91,10 +92,11 @@ int main() {
 
   //string filename = argv[1];
   //int numQuotes = stoi(argv[2]);
-  //int safeWords = stoi(argv[3])
+  //int safeWords = stoi(argv[3]);
 
   string filename = "Ron_Burgundy.txt";
   int numQuotes = 3;
+  int safeWords = 1;
 
   ifstream input_file;
   input_file.open(filename);
@@ -104,7 +106,14 @@ int main() {
     return 0;
   }
 
-
+  FilterProfanity* filterProfanity;
+  if(safeWords != 0 || safeWords != 1){
+    cout << "Invalide safeWords argument" << endl;
+    return 0;
+  }
+  else if(safeWords == 1){
+    filterProfanity = new FilterProfanity();
+  }
 
   vector <string> beginning;
   unordered_map <string, Word*> wordHash;
@@ -117,41 +126,50 @@ int main() {
   string previousWord = "";
   // while(input_file >> word && iterations != 0){
     while(input_file >> word){
-    // cout << word;
-    bool beginning = false;
-    bool ending = false;
+      // cout << word;
+      bool profanityWord = false;
+      bool beginning = false;
+      bool ending = false;
 
-    //the start of a sentence
-    if(sentenceWordPosition == 1){
-      // cout << " (beginning of sentence)";
-      beginning = true;
-      totalBeginning++;
-      if(wordExist(beginningHash, word)){
-        beginningHash[word]++;
+      if (safeWords == 1){
+        profanityWord = filterProfanity.isProfanity(word);
       }
-      else{
-        beginningHash[word] = 1;
+
+      //the start of a sentence
+      if(sentenceWordPosition == 1){
+        // cout << " (beginning of sentence)";
+        beginning = true;
+        if(!profanityWord){
+          totalBeginning++;
+          if(wordExist(beginningHash, word)){
+            beginningHash[word]++;
+          }
+          else{
+            beginningHash[word] = 1;
+          }
+        }
       }
-    }
-    
-    //the end of a sentence
-    if(word.find(".") != string::npos || word.find("!") != string::npos || word.find("?") != string::npos){
-      // cout << " (end of sentence)";
-      sentenceWordPosition = 0;
-      ending = true;
-    }
+      
+      //the end of a sentence
+      if(word.find(".") != string::npos || word.find("!") != string::npos || word.find("?") != string::npos){
+        // cout << " (end of sentence)";
+        sentenceWordPosition = 0;
+        ending = true;
+      }
 
-    //check if the word is in the hash
-    if(!wordExist(wordHash, word)){
-      wordHash[word] = new Word(word, beginning, ending);
-    }
+      if(!profanityWord){
+        //check if the word is in the hash
+        if(!wordExist(wordHash, word)){
+          wordHash[word] = new Word(word, beginning, ending);
+        }
 
-    //add the current word to the previous word
-    if(previousWord != ""){
-      Word* currentWord = wordHash[word];
-      wordHash[previousWord]->add(currentWord);
-    }
-    previousWord = word;
+        //add the current word to the previous word
+        if(previousWord != ""){
+          Word* currentWord = wordHash[word];
+          wordHash[previousWord]->add(currentWord);
+        }
+        previousWord = word;
+      }
 
     iterations--;
     sentenceWordPosition++;
@@ -168,7 +186,9 @@ int main() {
     cout << outputString << endl;
   }
 
+  //delete the objects in the system
   deleteHashTable(wordHash);
+  delete filterProfanity;
 
   return 0;
 }

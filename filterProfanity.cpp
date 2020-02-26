@@ -7,7 +7,7 @@ FilterProfanity::FilterProfanity(){
     bool file_exists = true;
 
     if(!input_file.is_open()){
-        cout << "File could not be opened" << endl;
+        cout << " Profanity file could not be opened" << endl;
         file_exists = false;
     }
 
