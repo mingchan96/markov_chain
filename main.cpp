@@ -132,7 +132,7 @@ int main() {
       bool ending = false;
 
       if (safeWords == 1){
-        profanityWord = filterProfanity.isProfanity(word);
+        profanityWord = filterProfanity->isProfanity(word);
       }
 
       //the start of a sentence

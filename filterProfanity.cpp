@@ -1,4 +1,4 @@
-#include "filterProfanity.h";
+#include "filterProfanity.h"
 
 FilterProfanity::FilterProfanity(){
     string filename = "profanity.txt";
