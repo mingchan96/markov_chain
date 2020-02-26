@@ -1,6 +1,6 @@
 all: markov_chain_quotes
 
-markov_chain: main.o word.o filterProfanity.o
+markov_chain_quotes: main.o word.o filterProfanity.o
 	g++ main.o word.o filterProfanity.o -o markov_chain_quotes
 
 main.o: main.cpp
@@ -11,3 +11,6 @@ word.o: word.cpp
 
 filterProfanity.o: filterProfanity.cpp
 	g++ -c filterProfanity.cpp
+
+clean:
+	rm *.o markov_chain_quotes
