@@ -18,9 +18,9 @@ class Word
     int totalNextWords;
     int oldRandomNumber = 0;
     unordered_map<string, int> wordCount;
-    unordered_map<string, Word*> nextWord;
 
   public:
+    unordered_map<string, Word*> nextWord;
     // static int totalExistingWords;
     //constructor
     Word(string s, bool b, bool e);
@@ -35,7 +35,8 @@ class Word
     void add(Word* word);
     //get the next word
     Word* getNext();
-
+    //print the next words 
+    void printNextWords();
 };
 
 #endif

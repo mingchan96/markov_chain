@@ -4,6 +4,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <unordered_map>
 #include <random>
 #include <time.h>
@@ -30,17 +31,24 @@ bool wordExist(unordered_map<string, T> wordHash, string word){
   return true;
 }
 
+bool isEndOfSentence(string word){
+  char lastChar = word.back();
+  unordered_set<char> punctuations {'.','!','?'};
+  return punctuations.find(lastChar) != punctuations.end();
+}
+
 int generateRandomNumber(int totalWords, int oldNumber){
   int min = 1;
   int max = totalWords;
-  mt19937 rng(time(0));
+  // mt19937 rng(time(0));
+  mt19937_64 rng(time(0));
   uniform_int_distribution<int> gen(min, max);
 
   int randomNumber = gen(rng);
   while(randomNumber == oldNumber){
     randomNumber = gen(rng);
   }
-  cout << "Random Number: " << randomNumber << endl;
+  // cout << "Random Number: " << randomNumber << endl;
   return randomNumber;
 }
 
@@ -56,6 +64,7 @@ string generateStartWord(unordered_map<string,int> beginningHash, int randomNumb
       //if the random number is between x and y, then choice this word
       if(x <= randomNumber && randomNumber <= y){
           key = itr->first;
+          cout << "Starting word: " << key << endl;
           return key;
       }
       else{
@@ -70,9 +79,8 @@ string markovIteration(string startWord, unordered_map<string, Word*> wordHash, 
   string output = startWord;
   Word* currentWord = wordHash[startWord]->getNext();
 
-  while(iterations != 0){
+  while(iterations != 0 && currentWord != NULL){
     output += " " + currentWord->getWord();
-
     //check if the word is a word at the end of a sentence
     if(currentWord->isEnd()){
       return output;
@@ -94,7 +102,7 @@ int main() {
   //int numQuotes = stoi(argv[2]);
   //int safeWords = stoi(argv[3]);
 
-  string filename = "Ron_Burgundy.txt";
+  string filename = "Christmas_Carol.txt";
   int numQuotes = 3;
   int safeWords = 1;
 
@@ -107,13 +115,18 @@ int main() {
   }
 
   FilterProfanity* filterProfanity;
-  if(safeWords != 0 || safeWords != 1){
-    cout << "Invalide safeWords argument" << endl;
+  if(safeWords == 1){
+    filterProfanity = new FilterProfanity();
+    cout << "***Safe words is turned on***\n" << endl;
+  }
+  else if(safeWords == 0){
+    cout << "***Safe words is turned off***\n" << endl;
+  }
+  else{
+    cout << "Invalid safeWords argument" << endl;
     return 0;
   }
-  else if(safeWords == 1){
-    filterProfanity = new FilterProfanity();
-  }
+  
 
   vector <string> beginning;
   unordered_map <string, Word*> wordHash;
@@ -151,7 +164,8 @@ int main() {
       }
       
       //the end of a sentence
-      if(word.find(".") != string::npos || word.find("!") != string::npos || word.find("?") != string::npos){
+      // if(word.find(".") != string::npos || word.find("!") != string::npos || word.find("?") != string::npos){
+      if(isEndOfSentence(word)){
         // cout << " (end of sentence)";
         sentenceWordPosition = 0;
         ending = true;
@@ -183,12 +197,13 @@ int main() {
     randomNumber = generateRandomNumber(totalBeginning, randomNumber);
     string startingWord = generateStartWord(beginningHash, randomNumber);
     string outputString = markovIteration(startingWord, wordHash, 100);
-    cout << outputString << endl;
+    cout << outputString << "\n" << endl;
   }
-
+  // wordHash["Stay"]->printNextWords();
   //delete the objects in the system
   deleteHashTable(wordHash);
-  delete filterProfanity;
+  if(safeWords==1) delete filterProfanity;
+  cout << "Executed: line 203" << endl;
 
   return 0;
 }

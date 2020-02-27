@@ -46,9 +46,15 @@ void Word::add(Word* word){
 }
 
 Word* Word::getNext(){
-    int min = 1;
+    //if the hashtable doesn't have any next words
+    if(wordCount.size() == 0){
+      return NULL;
+    }
+    
+    int min = 0;
     int max = totalNextWords;
-    mt19937 rng(time(0));
+    // mt19937 rng(time(0));
+    mt19937_64 rng(time(0));
     uniform_int_distribution<int> gen(min, max);
     int randomNumber = gen(rng);
 
@@ -61,20 +67,28 @@ Word* Word::getNext(){
     oldRandomNumber = randomNumber;
 
     //iterate through the hash table to find the next word
-    int x = 1;
+    int x = 0;
     string nextWordKey = "";
     unordered_map<string, int>:: iterator itr;
     for(itr = wordCount.begin(); itr != wordCount.end(); itr++){
+        nextWordKey = itr->first;
         int y = x + itr->second;
         //if the random number is between x and y, then choice this word
         if(x <= randomNumber && randomNumber <= y){
-            nextWordKey = itr->first;
             break;
         }
         else{
             x = y;
         }
     }
-
     return nextWord[nextWordKey];
+}
+
+void Word::printNextWords(){
+  cout << "Printing next words for \""<< word <<"\""<< endl;
+  unordered_map<string, Word*>:: iterator itr;
+    for(itr = nextWord.begin(); itr != nextWord.end(); itr++){
+      cout << itr->second->getWord() << ", ";
+    }
+    cout << endl;
 }
