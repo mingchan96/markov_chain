@@ -102,9 +102,10 @@ int main() {
   //int numQuotes = stoi(argv[2]);
   //int safeWords = stoi(argv[3]);
 
+  // string filename = "Ron_Burgundy.txt";
   string filename = "Christmas_Carol.txt";
   int numQuotes = 3;
-  int safeWords = 1;
+  int safeWords = 0;
 
   ifstream input_file;
   input_file.open(filename);
@@ -191,15 +192,16 @@ int main() {
     // cout << endl;
   }
   input_file.close();
-  // cout << "Number of elements in wordHash: " <<wordHash.size() << endl;
+
   int randomNumber = 0;
   for (int i = numQuotes; i > 0; i--){
     randomNumber = generateRandomNumber(totalBeginning, randomNumber);
     string startingWord = generateStartWord(beginningHash, randomNumber);
+    // string startingWord = "Dear";
     string outputString = markovIteration(startingWord, wordHash, 100);
     cout << outputString << "\n" << endl;
   }
-  // wordHash["Stay"]->printNextWords();
+  
   //delete the objects in the system
   deleteHashTable(wordHash);
   if(safeWords==1) delete filterProfanity;

@@ -46,9 +46,10 @@ void Word::add(Word* word){
 }
 
 Word* Word::getNext(){
+    Word* nextWordPtr = NULL;
     //if the hashtable doesn't have any next words
     if(wordCount.size() == 0){
-      return NULL;
+      return nextWordPtr;
     }
     
     int min = 0;
@@ -72,6 +73,7 @@ Word* Word::getNext(){
     unordered_map<string, int>:: iterator itr;
     for(itr = wordCount.begin(); itr != wordCount.end(); itr++){
         nextWordKey = itr->first;
+        nextWordPtr = nextWord[nextWordKey];
         int y = x + itr->second;
         //if the random number is between x and y, then choice this word
         if(x <= randomNumber && randomNumber <= y){
@@ -81,7 +83,7 @@ Word* Word::getNext(){
             x = y;
         }
     }
-    return nextWord[nextWordKey];
+    return nextWordPtr;
 }
 
 void Word::printNextWords(){
