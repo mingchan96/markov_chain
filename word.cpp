@@ -37,15 +37,15 @@ void Word::setEnd(bool e){
     end = e;
 }
 
-void Word::add(Word* word){
+void Word::add(Word* w){
     //if the word doesn't exists, then insert it into the hash table
-    if(wordCount.find(word->getWord()) == wordCount.end()){
-        wordCount.insert(make_pair(word->getWord(),1));
-        nextWord.insert(make_pair(word->getWord(), word));
+    if(wordCount.find(w->getWord()) == wordCount.end()){
+        wordCount.insert(make_pair(w->getWord(),1));
+        nextWord.insert(make_pair(w->getWord(), w));
     }
     //if it does exist, then increment the counter for the word
     else{
-        wordCount[word->getWord()]++;
+        wordCount[w->getWord()]++;
     }
     totalNextWords++;
 }
@@ -70,6 +70,7 @@ Word* Word::getNext(){
       randomNumber = gen(rng);
       iterations--;
     }
+    
     oldRandomNumber = randomNumber;
 
     //iterate through the hash table to find the next word
@@ -81,7 +82,7 @@ Word* Word::getNext(){
         nextWordPtr = nextWord[nextWordKey];
         int y = x + itr->second;
         //if the random number is between x and y, then choice this word
-        if(x <= randomNumber && randomNumber <= y){
+        if(randomNumber <= y){
             break;
         }
         else{
@@ -93,9 +94,8 @@ Word* Word::getNext(){
 
 void Word::printNextWords(){
   cout << "Printing next words for \""<< word <<"\""<< endl;
-  unordered_map<string, Word*>:: iterator itr;
-    for(itr = nextWord.begin(); itr != nextWord.end(); itr++){
-      cout << itr->second->getWord() << ", ";
+  unordered_map<string, int>:: iterator itr;
+    for(itr = wordCount.begin(); itr != wordCount.end(); itr++){
+      cout << itr->first << ", " << itr->second << endl;
     }
-    cout << endl;
 }

@@ -52,7 +52,7 @@ for tweet in timeline:
     # print(tweet.full_text)
     # processed_tweet = erase_links(tweet.full_text)
     # output_file.write(tweet.full_text + "#")
-    print(tweet.full_text + "#", file=output_file)
+    print((tweet.full_text).lower(), file=output_file)
 output_file.close()
 
 #execute the main executable

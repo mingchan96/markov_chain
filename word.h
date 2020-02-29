@@ -12,10 +12,10 @@ using namespace std;
 class Word
 {
   private:
-    string word;
+    string word = "";
     bool beginning = false;
     bool end = false;
-    int totalNextWords;
+    int totalNextWords = 0;
     int oldRandomNumber = 0;
     unordered_map<string, int> wordCount;
 
