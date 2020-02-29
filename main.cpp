@@ -33,8 +33,9 @@ bool wordExist(unordered_map<string, T> wordHash, string word){
 
 bool isEndOfSentence(string word){
   char lastChar = word.back();
-  unordered_set<char> punctuations {'.','!','?'};
-  return punctuations.find(lastChar) != punctuations.end();
+  // unordered_set<char> punctuations {'.','!','?'};
+  // return punctuations.find(lastChar) != punctuations.end();
+  return (lastChar == '#');
 }
 
 int generateRandomNumber(int totalWords, int oldNumber){
@@ -96,16 +97,16 @@ string markovIteration(string startWord, unordered_map<string, Word*> wordHash, 
 //first argument filename, second number of quotes
 //third argument determines if only non-profanity words allowed
 //int main(int argc, char** argv){
-int main() {
+int main(int argc, char *argv[]) {
 
-  //string filename = argv[1];
-  //int numQuotes = stoi(argv[2]);
-  //int safeWords = stoi(argv[3]);
+  string filename = argv[1];
+  int numQuotes = stoi(argv[2]);
+  int safeWords = stoi(argv[3]);
 
   // string filename = "Ron_Burgundy.txt";
-  string filename = "Christmas_Carol.txt";
-  int numQuotes = 3;
-  int safeWords = 0;
+  // string filename = "Christmas_Carol.txt";
+  // int numQuotes = 3;
+  // int safeWords = 0;
 
   ifstream input_file;
   input_file.open(filename);
