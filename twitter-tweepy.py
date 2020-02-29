@@ -34,6 +34,8 @@ except:
 #third argument is turning on the safe words
 
 screen_name = sys.argv[1]
+num_quotes = sys.argv[2]
+safe_words = sys.argv[3]
 # screen_name = "ellonmusk"
 timeline = None
 try:
@@ -44,7 +46,8 @@ except:
     sys.exit("Sorry error in querying the screen name")
 
 #open file to write the tweets in 
-output_file = open(screen_name+".txt", "w")
+filename = screen_name+".txt"
+output_file = open(filename, "w")
 for tweet in timeline:
     # print(tweet.full_text)
     # processed_tweet = erase_links(tweet.full_text)
@@ -52,4 +55,8 @@ for tweet in timeline:
     print(tweet.full_text + "#", file=output_file)
 output_file.close()
 
-
+#execute the main executable
+# first argument filename, second number of quotes
+# third argument determines if only non-profanity words allowed
+execute_markov_chain = "./markov_chain_quotes {0} {1} {2}".format(filename, num_quotes, safe_words) 
+os.system(execute_markov_chain)
