@@ -7,10 +7,8 @@
 
 // using namespace std;
 
-Word::Word(string s, bool b, bool e){
+Word::Word(string s){
     word = s;
-    beginning = b;
-    end = e;
     // Word::totalExistingWords++;
 }
 
@@ -30,6 +28,13 @@ bool Word::isBeginning(){
 
 bool Word::isEnd(){
     return end;
+}
+
+void Word::setBeginning(bool b){
+    beginning = b;
+}
+void Word::setEnd(bool e){
+    end = e;
 }
 
 void Word::add(Word* word){

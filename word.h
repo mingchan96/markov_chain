@@ -13,8 +13,8 @@ class Word
 {
   private:
     string word;
-    bool beginning;
-    bool end;
+    bool beginning = false;
+    bool end = false;
     int totalNextWords;
     int oldRandomNumber = 0;
     unordered_map<string, int> wordCount;
@@ -23,7 +23,7 @@ class Word
     unordered_map<string, Word*> nextWord;
     // static int totalExistingWords;
     //constructor
-    Word(string s, bool b, bool e);
+    Word(string s);
     //destructor
     ~Word();
     //get the word
@@ -31,6 +31,9 @@ class Word
     //get if the word is the beginning or end of sentence
     bool isBeginning();
     bool isEnd();
+    //set the beginning and ending
+    void setBeginning(bool b);
+    void setEnd(bool e);
     //add the next word
     void add(Word* word);
     //get the next word

@@ -2,6 +2,8 @@
 #include <fstream>
 #include <algorithm>
 #include <string.h>
+#include <sstream>
+// #include <bits/stdc++.h>
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -62,9 +64,9 @@ string generateStartWord(unordered_map<string,int> beginningHash, int randomNumb
   unordered_map<string, int>:: iterator itr;
   for(itr = beginningHash.begin(); itr != beginningHash.end(); itr++){
       int y = x + itr->second;
+      key = itr->first;
       //if the random number is between x and y, then choice this word
       if(x <= randomNumber && randomNumber <= y){
-          key = itr->first;
           cout << "Starting word: " << key << endl;
           return key;
       }
@@ -137,61 +139,114 @@ int main(int argc, char *argv[]) {
   int iterations = 100;
   int sentenceWordPosition = 1;
   int totalBeginning = 0;
-  string word;
-  string previousWord = "";
+  // string word = "";
+  // string previousWord = "";
   // while(input_file >> word && iterations != 0){
-    while(input_file >> word){
-      // cout << word;
-      bool profanityWord = false;
-      bool beginning = false;
-      bool ending = false;
+  //   while(input_file >> word){
+  //     // cout << word;
+  //     bool profanityWord = false;
+  //     bool beginning = false;
+  //     bool ending = false;
 
-      if (safeWords == 1){
-        profanityWord = filterProfanity->isProfanity(word);
-      }
+  //     if (safeWords == 1){
+  //       profanityWord = filterProfanity->isProfanity(word);
+  //     }
 
-      //the start of a sentence
-      if(sentenceWordPosition == 1){
-        // cout << " (beginning of sentence)";
-        beginning = true;
-        if(!profanityWord){
-          totalBeginning++;
-          if(wordExist(beginningHash, word)){
-            beginningHash[word]++;
-          }
-          else{
-            beginningHash[word] = 1;
-          }
-        }
-      }
+  //     //the start of a sentence
+  //     if(sentenceWordPosition == 1){
+  //       // cout << " (beginning of sentence)";
+  //       beginning = true;
+  //       if(!profanityWord){
+  //         totalBeginning++;
+  //         if(wordExist(beginningHash, word)){
+  //           beginningHash[word]++;
+  //         }
+  //         else{
+  //           beginningHash[word] = 1;
+  //         }
+  //       }
+  //     }
       
-      //the end of a sentence
-      // if(word.find(".") != string::npos || word.find("!") != string::npos || word.find("?") != string::npos){
-      if(isEndOfSentence(word)){
-        // cout << " (end of sentence)";
-        sentenceWordPosition = 0;
-        ending = true;
-      }
+  //     //the end of a sentence
+  //     if(isEndOfSentence(word)){
+  //       // cout << " (end of sentence)";
+  //       sentenceWordPosition = 0;
+  //       ending = true;
+  //     }
 
-      if(!profanityWord){
-        //check if the word is in the hash
-        if(!wordExist(wordHash, word)){
-          wordHash[word] = new Word(word, beginning, ending);
-        }
+  //     if(!profanityWord){
+  //       //check if the word is in the hash
+  //       if(!wordExist(wordHash, word)){
+  //         wordHash[word] = new Word(word, beginning, ending);
+  //       }
 
-        //add the current word to the previous word
-        if(previousWord != ""){
-          Word* currentWord = wordHash[word];
-          wordHash[previousWord]->add(currentWord);
-        }
-        previousWord = word;
-      }
+  //       //add the current word to the previous word
+  //       if(previousWord != ""){
+  //         Word* currentWord = wordHash[word];
+  //         wordHash[previousWord]->add(currentWord);
+  //       }
+  //       previousWord = word;
+  //     }
 
-    iterations--;
-    sentenceWordPosition++;
+  //   iterations--;
+  //   sentenceWordPosition++;
     
-    // cout << endl;
+  //   // cout << endl;
+  // }
+
+  string tweet = "";
+  Word* wordPtr = NULL;
+  Word* previousWordPtr = NULL;
+
+  while(getline(input_file, tweet)){
+    istringstream ss(tweet);
+    bool beginningTweet = true;
+
+    do{
+      bool profanityWord = false;
+      string word = "";
+      ss >> word;
+      
+      //if safe word is turned on and word is a profanity word then skip processing
+      if (safeWords == 1 && filterProfanity->isProfanity(word)){
+        continue;
+      }
+
+      //check if the word is in the hash
+      //create it if doesn't exist and fetch it if it does exist
+      if(!wordExist(wordHash, word)){
+        wordPtr = new Word(word);
+        wordHash[word] = wordPtr;
+      }
+      else{
+        wordPtr = wordHash[word];
+      }
+
+      if(previousWordPtr != NULL){
+        previousWordPtr->add(wordPtr);
+      }
+      previousWordPtr = wordPtr;
+
+      if (beginningTweet){
+        totalBeginning++;
+        if(wordExist(beginningHash, word)){
+          beginningHash[word]++;
+        }
+        else{
+          beginningHash[word] = 1;
+          wordPtr->setBeginning(true);
+        }
+        beginningTweet = false;
+      }
+
+    }while(ss);
+
+    //last word to be processed will be set to end
+    if(wordPtr != NULL){
+      wordPtr->setEnd(true);
+    }
   }
+
   input_file.close();
 
   int randomNumber = 0;
