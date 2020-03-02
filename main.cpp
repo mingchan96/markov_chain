@@ -40,6 +40,7 @@ bool isEndOfSentence(string word){
   return (lastChar == '#');
 }
 
+//generate random number
 int generateRandomNumber(int totalWords, int oldNumber){
   int min = 1;
   int max = totalWords;
@@ -48,8 +49,10 @@ int generateRandomNumber(int totalWords, int oldNumber){
   uniform_int_distribution<int> gen(min, max);
 
   int randomNumber = gen(rng);
-  while(randomNumber == oldNumber){
+  int iterations = 10;
+  while(randomNumber == oldNumber && iterations > 0){
     randomNumber = gen(rng);
+    iterations--;
   }
   // cout << "Random Number: " << randomNumber << endl;
   return randomNumber;
