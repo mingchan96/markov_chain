@@ -66,7 +66,7 @@ string generateStartWord(unordered_map<string,int> beginningHash, int randomNumb
       int y = x + itr->second;
       key = itr->first;
       //if the random number is between x and y, then choice this word
-      if(x <= randomNumber && randomNumber <= y){
+      if(randomNumber <= y){
           cout << "Starting word: " << key << endl;
           return key;
       }
@@ -77,7 +77,7 @@ string generateStartWord(unordered_map<string,int> beginningHash, int randomNumb
   return key;
 }
 
-//generate the sentences
+//generate the sentences with iterations as a limiter to prevent going into infinite loop
 string markovIteration(string startWord, unordered_map<string, Word*> wordHash, int iterations){
   string output = startWord;
   Word* currentWord = wordHash[startWord]->getNext();
