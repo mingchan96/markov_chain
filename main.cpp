@@ -222,9 +222,12 @@ int main(int argc, char *argv[]) {
         wordPtr = wordHash[word];
       }
 
+      //link current word to the previous word
       if(previousWordPtr != NULL){
         previousWordPtr->add(wordPtr);
       }
+
+      //change the previous word pointer to this current pointer
       previousWordPtr = wordPtr;
 
       if (beginningTweet){
@@ -253,7 +256,6 @@ int main(int argc, char *argv[]) {
   for (int i = numQuotes; i > 0; i--){
     randomNumber = generateRandomNumber(totalBeginning, randomNumber);
     string startingWord = generateStartWord(beginningHash, randomNumber);
-    // string startingWord = "Dear";
     string outputString = markovIteration(startingWord, wordHash, 100);
     cout << outputString << "\n" << endl;
   }
@@ -261,7 +263,7 @@ int main(int argc, char *argv[]) {
   //delete the objects in the system
   deleteHashTable(wordHash);
   if(safeWords==1) delete filterProfanity;
-  cout << "Executed: line 203" << endl;
+  cout << "End of Program" << endl;
 
   return 0;
 }
