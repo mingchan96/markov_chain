@@ -142,60 +142,6 @@ int main(int argc, char *argv[]) {
   int iterations = 100;
   int sentenceWordPosition = 1;
   int totalBeginning = 0;
-  // string word = "";
-  // string previousWord = "";
-  // while(input_file >> word && iterations != 0){
-  //   while(input_file >> word){
-  //     // cout << word;
-  //     bool profanityWord = false;
-  //     bool beginning = false;
-  //     bool ending = false;
-
-  //     if (safeWords == 1){
-  //       profanityWord = filterProfanity->isProfanity(word);
-  //     }
-
-  //     //the start of a sentence
-  //     if(sentenceWordPosition == 1){
-  //       // cout << " (beginning of sentence)";
-  //       beginning = true;
-  //       if(!profanityWord){
-  //         totalBeginning++;
-  //         if(wordExist(beginningHash, word)){
-  //           beginningHash[word]++;
-  //         }
-  //         else{
-  //           beginningHash[word] = 1;
-  //         }
-  //       }
-  //     }
-      
-  //     //the end of a sentence
-  //     if(isEndOfSentence(word)){
-  //       // cout << " (end of sentence)";
-  //       sentenceWordPosition = 0;
-  //       ending = true;
-  //     }
-
-  //     if(!profanityWord){
-  //       //check if the word is in the hash
-  //       if(!wordExist(wordHash, word)){
-  //         wordHash[word] = new Word(word, beginning, ending);
-  //       }
-
-  //       //add the current word to the previous word
-  //       if(previousWord != ""){
-  //         Word* currentWord = wordHash[word];
-  //         wordHash[previousWord]->add(currentWord);
-  //       }
-  //       previousWord = word;
-  //     }
-
-  //   iterations--;
-  //   sentenceWordPosition++;
-    
-  //   // cout << endl;
-  // }
 
   string tweet = "";
   Word* wordPtr = NULL;
